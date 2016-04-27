@@ -1,0 +1,4 @@
+library:
+    sign_out: 'Выход'
+    sign_in: 'Войти'
+    last_login_in_site: 'Последний вход на сайт'
