@@ -1,0 +1,20 @@
+services:
+    helper.path:
+        class: AppBundle\Helper\Book
+        arguments: ['@service_container']
+
+    bool.subscriber:
+        class: AppBundle\EventListener\BookSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        arguments: ['@service_container']
+
+    helper.simple_image:
+        class: AppBundle\Helper\SimpleImage
+        arguments: ['@service_container']
+
+    img.twig.extension:
+        class: AppBundle\Twig\Extension\ImgExtension
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: twig.extension }

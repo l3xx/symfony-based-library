@@ -8,7 +8,7 @@
     <target name="build" depends="cache-clear, assets" />
 
     <!-- Install targets -->
-    <target name="install" depends="composer-install, composer, cache-clear, assets" />
+    <target name="install" depends="composer-install, composer, cache-clear, assets, make-dirs" />
 
     <!-- install composer -->
     <target name="composer-install">
@@ -22,6 +22,15 @@
             </else>
         </if>
     </target>
+
+    <!-- Создаёт нужные директории -->
+    <target name="make-dirs">
+        <echo msg="Making directory ./web/books" />
+        <mkdir dir="./web/books" />
+        <echo msg="Making directory ./web/cache" />
+        <mkdir dir="./web/cache" />
+    </target>
+
 
     <!-- dump optimized autoloader -->
     <target name="composer-dump-autoload">

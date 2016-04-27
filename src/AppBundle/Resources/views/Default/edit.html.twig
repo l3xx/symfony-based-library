@@ -1,0 +1,105 @@
+{% extends "AppBundle::default.html.twig" %}
+
+
+{% block header %}
+   Редактирвоание/Добавление книги
+{% endblock header %}
+{% block body %}
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Основные данные</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                {{ form_start(form, {'attr': {'role': 'form'}}) }}
+                {{ form_errors(form) }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label >{{ form_label(form.name) }}</label>
+                            {{ form_errors(form.name) }}
+                            {{ form_widget(form.name,{'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            <label >{{ form_label(form.author) }}</label>
+                            {{ form_errors(form.author) }}
+                            {{ form_widget(form.author,{'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                {{ form_widget(form.isDownloaded) }} {{ form_label(form.isDownloaded) }}
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label >{{ form_label(form.fileBook) }}</label>
+                            {{ form_errors(form.fileBook) }}
+                            {{ form_widget(form.fileBook) }}
+                            {% if book.fileBook %}
+                            <p class="help-block"><a href="/{{ book.fileBook }}">Скачать</a></p>
+                            <p class="help-block"><a href="/{{ book.id }}">Удалить</a></p>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label >{{ form_label(form.cover) }}</label>
+                            {{ form_errors(form.cover) }}
+                            {{ form_widget(form.cover) }}
+                            {% if book.cover %}
+                                <img src="/{{ imageResize(book.cover) }}" >
+                                <p class="help-block"><a href="/{{ book.id }}">Удалить</a></p>
+                            {% endif %}
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                {{ form_end(form) }}
+            </div><!-- /.box -->
+        </div><!--/.col (left) -->
+        <!-- right column -->
+    </div>   <!-- /.row -->
+{% endblock body %}
+
+
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#{% stylesheets 'bundles/app/plugins/datatables/dataTables.bootstrap.css'#}
+    {#filter='cssrewrite' %}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
+    {#{% endstylesheets %}#}
+{#{% endblock stylesheets%}#}
+
+{#{% block javascripts %}#}
+    {#{{ parent() }}#}
+    {#{% javascripts#}
+    {#'@AppBundle/Resources/public/plugins/datatables/jquery.dataTables.min.js'#}
+    {#'@AppBundle/Resources/public/plugins/datatables/dataTables.bootstrap.min.js'#}
+    {#'@AppBundle/Resources/public/dist/js/demo.js'#}
+    {#%}#}
+    {#<script src="{{ asset_url }}"></script>#}
+    {#{% endjavascripts %}#}
+    {#<script>#}
+        {#$(function () {#}
+            {#$('#grid_book').DataTable({#}
+                {#"columns": [#}
+                    {#null,#}
+                    {#null,#}
+                    {#{ "orderable": false },#}
+                    {#{ "orderable": false },#}
+                    {#null,#}
+                    {#{% if app.user %}#}
+                    {#,{ "orderable": false }#}
+                    {#{% endif %}#}
+                {#]#}
+            {#})#}
+{#//                    можно сделать и ajax загрузку и lazy loading, но долго. Хотя, я думаю, мало кто прочитает это ))))#}
+{#//                    {#}
+{#//                        "processing": true,#}
+{#//                        "serverSide": true,#}
+{#//                        "ajax": "scripts/server_processing.php"#}
+{#//                    }#}
+{#//            );#}
+        {#});#}
+    {#</script>#}
+{#{% endblock javascripts %}#}
