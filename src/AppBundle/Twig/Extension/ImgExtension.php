@@ -32,6 +32,8 @@ class ImgExtension extends \Twig_Extension
     }
 
     /**
+     * Хитрый ресайзер
+     *
      * @param $path
      * @param $w
      * @param $h
@@ -41,11 +43,29 @@ class ImgExtension extends \Twig_Extension
     {
         $helper=$this->container->get('helper.path');
         $simpleImage=$this->container->get('helper.simple_image');
-        $realPath=$helper->getWebPath().DIRECTORY_SEPARATOR.$path;
-        $simpleImage->load($realPath);
-        $simpleImage->resize($w, $h);
-        $newPath=$helper->getCacheDir().DIRECTORY_SEPARATOR.md5($path).'.jpg';
-        $simpleImage->save($helper->getWebPath().DIRECTORY_SEPARATOR.$newPath);
+        $newPath=$helper->getCacheDir().DIRECTORY_SEPARATOR.md5($path).'_'.$w.'x'.$h.'_.jpg';
+        $isExist=$helper->getFs()->exists($helper->getWebPath().DIRECTORY_SEPARATOR.$newPath);
+        if (!$isExist)
+        {
+            $realPath=$helper->getWebPath().DIRECTORY_SEPARATOR.$path;
+            $simpleImage->load($realPath);
+
+            if ($h==0 && $w>0)
+            {
+                $simpleImage->resizeToWidth($w);
+            }
+            elseif ($h>0 && $w==0)
+            {
+                $simpleImage->resizeToHeight($h);
+            }
+            else
+            {
+                $simpleImage->resize($w, $h);
+            }
+            $newPath=$helper->getCacheDir().DIRECTORY_SEPARATOR.md5($path).'_'.$w.'x'.$h.'_.jpg';
+            $simpleImage->save($helper->getWebPath().DIRECTORY_SEPARATOR.$newPath);
+        }
+
         return $newPath;
     }
 

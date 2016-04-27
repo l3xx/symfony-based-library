@@ -92,7 +92,9 @@
                 <li class="header">Книги</li>
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="{{ path('homepage') }}"><i class="fa fa-book"></i> <span>Весь список</span></a></li>
-                <li ><a href="{{ path('homepage') }}"><i class="fa fa-plus"></i> <span>Добавить книгу</span></a></li>
+                {% if app.user %}
+                <li ><a href="{{ path('edit_book',{'id':0}) }}"><i class="fa fa-plus"></i> <span>Добавить книгу</span></a></li>
+                {% endif %}
             </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
