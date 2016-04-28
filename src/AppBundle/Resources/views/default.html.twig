@@ -61,6 +61,7 @@
                                 <p>
                                     {{ app.user.username }} - {{ app.user.email }}
                                     <small>{{ 'library.last_login_in_site'|trans }} {{ app.user.lastLogin|date }}</small>
+                                    <small>API KEY {{ app.user.token }}</small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->

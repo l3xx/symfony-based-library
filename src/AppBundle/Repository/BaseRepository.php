@@ -53,9 +53,10 @@ class BaseRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Сохранение сущности
      * @param $entity
-     * @throws \Doctrine\ORM\ORMException
+     * @param null $cacheName
+     * @throws ORM\ORMException
      */
-    public function save($entity)
+    public function save($entity,$cacheName=null)
     {
         try {
             $em = $this->getEntityManager();
@@ -70,6 +71,12 @@ class BaseRepository extends \Doctrine\ORM\EntityRepository
             $em->flush();
             if ($isNew) {
                 $this->postPersist($entity);
+            }
+
+            if ($cacheName)
+            {
+                $cacheDriver = $this->getEntityManager()->getConfiguration()->getResultCacheImpl();
+                $cacheDriver->delete($cacheName);
             }
         } catch (\Exception $e) {
             throw new ORM\ORMException('Не удается сохранить объект ' . get_class($entity), 0, $e);

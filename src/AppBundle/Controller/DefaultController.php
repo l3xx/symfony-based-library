@@ -60,7 +60,14 @@ class DefaultController extends Controller
         {
             //редактирвоание
             $book=$bookRepository->find($id);
+            if (!$book)
+            {
+                throw $this->createNotFoundException('The book does not exist');
+            }
         }
+        $cover=$book->getCover();
+        $fileBook=$book->getFileBook();
+
         $bookForm = $this->createForm(new BookFormType(),$book,
             array(
                 'action' => $this->generateUrl('edit_book',array('id'=>$id)),
@@ -68,29 +75,32 @@ class DefaultController extends Controller
             ));
 
         $bookForm->handleRequest($request);
+
         if ($bookForm->isValid()) {
 
             $uploadedFiles = $request->files->get('book');
             $helper=$this->get('helper.path');
+
             if ($uploadedFiles['fileBook'])
             {
+                $helper=$this->get('helper.path');
+                $helper->deleteFile($fileBook);
                 /* @var UploadedFile $bookUpload*/
                 $bookUpload= $uploadedFiles['fileBook'];
                 $fileBook=$helper->moveFile($bookUpload);
-                $book->setFileBook($fileBook);
             }
+            $book->setFileBook($fileBook);
 
             if ($uploadedFiles['cover'])
             {
+                $helper=$this->get('helper.path');
+                $helper->deleteFile($cover);
                 /* @var UploadedFile $bookUpload*/
                 $bookUpload= $uploadedFiles['cover'];
                 $cover=$helper->moveFile($bookUpload);
-                $book->setCover($cover);
             }
-
-//            $this->getDoctrine()->getManager()->persist($book);
-//            $this->getDoctrine()->getManager()->flush();
-            $bookRepository->save($book);
+            $book->setCover($cover);
+            $bookRepository->save($book,'book_cache');
             return $this->redirect(
                 $this->generateUrl('edit_book',array('id'=>$book->getId()))
             );
@@ -112,7 +122,11 @@ class DefaultController extends Controller
         $book=$bookRepository->find($id);
         if ($book)
         {
-            $bookRepository->delete(array($book->getId()));
+            $em=$this->getDoctrine()->getEntityManager();
+            $em->remove($book);
+            $em->flush();
+            $cacheDriver = $this->getDoctrine()->getManager()->getConfiguration()->getResultCacheImpl();
+            $cacheDriver->delete('book_cache');
             return $this->redirect(
                 $this->generateUrl('homepage'));
 
@@ -136,7 +150,7 @@ class DefaultController extends Controller
             $helper=$this->get('helper.path');
             $helper->deleteFile($cover);
             $book->setCover('');
-            $bookRepository->save($book);
+            $bookRepository->save($book,'book_cache');
             return $this->redirect(
                 $this->generateUrl('edit_book',array('id'=>$book->getId())));
         }
@@ -160,7 +174,7 @@ class DefaultController extends Controller
             $helper=$this->get('helper.path');
             $helper->deleteFile($file);
             $book->setFileBook('');
-            $bookRepository->save($book);
+            $bookRepository->save($book,'book_cache');
             return $this->redirect(
                 $this->generateUrl('edit_book',array('id'=>$book->getId())));
         }

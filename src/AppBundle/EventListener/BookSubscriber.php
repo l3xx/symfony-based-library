@@ -32,21 +32,18 @@ class BookSubscriber  implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
-            'postDelete',
+            'postRemove',
         );
     }
-    public function preDelete(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args)
     {
         $this->index($args);
     }
 
     public function index(LifecycleEventArgs $args)
     {
-
         $entity = $args->getEntity();
         $helper=$this->container->get('helper.path');
-
-            // perhaps you only want to act on some "Product" entity
         if ($entity instanceof Book) {
             if ($entity->getFileBook())
             {
@@ -57,6 +54,7 @@ class BookSubscriber  implements EventSubscriber
             {
                 $helper->deleteFile($entity->getCover());
             }
+
         }
     }
 

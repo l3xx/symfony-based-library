@@ -33,21 +33,17 @@
                             </label>
                         </div>
                         <div class="form-group">
-                            <label >{{ form_label(form.fileBook) }}</label>
-                            {{ form_errors(form.fileBook) }}
-                            {{ form_widget(form.fileBook) }}
+                            {{ form_row(form.fileBook) }}
                             {% if book.fileBook %}
                             <p class="help-block"><a href="/{{ book.fileBook }}">Скачать</a></p>
-                            <p class="help-block"><a href="/{{ book.id }}">Удалить</a></p>
+                            <p class="help-block"><a href="{{ path('delete_book_file',{'id':book.id })}}">Удалить</a></p>
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            <label >{{ form_label(form.cover) }}</label>
-                            {{ form_errors(form.cover) }}
-                            {{ form_widget(form.cover) }}
+                            {{ form_row(form.cover) }}
                             {% if book.cover %}
-                                <img src="/{{ imageResize(book.cover) }}" >
-                                <p class="help-block"><a href="/{{ book.id }}">Удалить</a></p>
+                                <img src="/{{ imageResize(book.cover,200,0) }}" >
+                                <p class="help-block"><a href="{{ path('delete_book_cover',{'id':book.id })}}">Удалить</a></p>
                             {% endif %}
                         </div>
                     </div><!-- /.box-body -->

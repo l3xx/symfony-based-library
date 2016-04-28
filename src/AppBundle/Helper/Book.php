@@ -17,7 +17,7 @@ class Book
 {
     private $container;
     private $fs;
-    private $levels=16;
+    private $levels=2;
     private $imgDir="books";
     private $cacheDir="cache";
 
@@ -32,7 +32,7 @@ class Book
     {
         $name=md5($file->getClientOriginalName());
         $path=$this->getWebPath().DIRECTORY_SEPARATOR.$this->getImgDir();
-        $namePath = str_split($name, $this->levels);
+        $namePath = str_split($name, 32/$this->levels);
         $pathAdded='';
         foreach ($namePath as $pathAdd)
         {
@@ -47,10 +47,13 @@ class Book
     public function deleteFile($filePath)
     {
         $name=$this->getWebPath().DIRECTORY_SEPARATOR.$filePath;
-        unlink($name);
+        if ($filePath && $this->fs->exists($name))
+        {
+            $this->fs->remove($name);
+            //TODO Сделать уделение лишних директорий
+        }
         return ;
     }
-
 
     /**
      * @return string

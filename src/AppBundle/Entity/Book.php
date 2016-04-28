@@ -26,7 +26,7 @@ class Book
      * Название Книги
      *
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", options={"comment": "Название Книги"})
      */
     private $name;
@@ -35,7 +35,7 @@ class Book
      * Автор
      *
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="author", type="string", options={"comment": "Автор"})
      */
     private $author;
@@ -45,7 +45,7 @@ class Book
      * Обложка
      *
      * @var string
-     *
+     * @Assert\Image()
      * @ORM\Column(name="cover", type="string",nullable=true, options={"comment": "Обложка"})
      */
     private $cover;
@@ -54,17 +54,14 @@ class Book
      * Файл книги
      *
      * @var string
+     * @Assert\File(
+     *     maxSize = "5m"
+     * )
      *
      * @ORM\Column(name="file_book", type="string", nullable=true, options={"comment": "Файл книги"})
      */
     private $fileBook;
 
-    /**
-     * Дата прочтения
-     * @var \DateTime
-     * @ORM\Column(name="read_date", type="datetime", nullable=true, options={"comment": "Дата прочтения"})
-     */
-    private $readDate;
 
 
     /**
@@ -146,22 +143,6 @@ class Book
     public function setFileBook($fileBook)
     {
         $this->fileBook = $fileBook;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getReadDate()
-    {
-        return $this->readDate;
-    }
-
-    /**
-     * @param \DateTime $readDate
-     */
-    public function setReadDate($readDate)
-    {
-        $this->readDate = $readDate;
     }
 
     /**

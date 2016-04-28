@@ -32,7 +32,11 @@
                                     <img src="{{ imageResize(book.cover,0,100)}}"/>
                                 {% endif %}
                             </td>
-                            <td>{{ book.isDownloaded}}</td>
+                            <td>
+                                {% if book.isDownloaded and book.fileBook %}
+                                    <a href="/{{ book.fileBook }}"><i class="fa fa-fw fa-download"></i></a>
+                                {% endif %}
+                            </td>
                             <td></td>
                             {% if app.user %}
                             <td><a href="{{ path('edit_book',{'id': book.id}) }}"><i class="fa fa-fw fa-edit"></i></a></td>
@@ -81,19 +85,21 @@
     {% endjavascripts %}
     <script>
         $(function () {
-            $('#grid_book').DataTable({
-                "columns": [
-                    null,
-                    null,
-                    { "orderable": false },
-                    { "orderable": false },
-                    null,
-                    {% if app.user %}
-                    ,{ "orderable": false }
-                    ,{ "orderable": false }
-                    {% endif %}
-                ]
-            })
+            $('#grid_book').DataTable(
+                    {#{#}
+                {#"columns": [#}
+                    {#null,#}
+                    {#null,#}
+                    {#{ "orderable": false },#}
+                    {#{ "orderable": false },#}
+                    {#null,#}
+                    {#{% if app.user %}#}
+                    {#,{ "orderable": false }#}
+                    {#,{ "orderable": false }#}
+                    {#{% endif %}#}
+                {#]#}
+            {#}#}
+            )
 //                    можно сделать и ajax загрузку и lazy loading, но долго. Хотя, я думаю, мало кто прочитает это ))))
 //                    {
 //                        "processing": true,
