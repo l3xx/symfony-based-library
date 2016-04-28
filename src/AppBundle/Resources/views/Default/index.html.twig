@@ -37,7 +37,7 @@
                                     <a href="/{{ book.fileBook }}"><i class="fa fa-fw fa-download"></i></a>
                                 {% endif %}
                             </td>
-                            <td></td>
+                            <td>{{ app.request.cookies.get('book_'~ book.id) }}</td>
                             {% if app.user %}
                             <td><a href="{{ path('edit_book',{'id': book.id}) }}"><i class="fa fa-fw fa-edit"></i></a></td>
                             <td><a href="{{ path('delete_book',{'id': book.id}) }}"><i class="fa fa-fw fa-trash-o"></i></a></td>
@@ -86,19 +86,20 @@
     <script>
         $(function () {
             $('#grid_book').DataTable(
-                    {#{#}
-                {#"columns": [#}
-                    {#null,#}
-                    {#null,#}
-                    {#{ "orderable": false },#}
-                    {#{ "orderable": false },#}
-                    {#null,#}
-                    {#{% if app.user %}#}
-                    {#,{ "orderable": false }#}
-                    {#,{ "orderable": false }#}
-                    {#{% endif %}#}
-                {#]#}
-            {#}#}
+                    {
+                "columns": [
+                    null,
+                    null,
+                    { "orderable": false },
+                    { "orderable": false },
+                    null
+                    {% if app.user %}
+                    ,{ "orderable": false }
+                    ,{ "orderable": false }
+                    {% endif %}
+                ],
+                        "order": [[ 4, "desc" ]]
+            }
             )
 //                    можно сделать и ajax загрузку и lazy loading, но долго. Хотя, я думаю, мало кто прочитает это ))))
 //                    {

@@ -8,8 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -28,7 +30,6 @@ class DefaultController extends Controller
 
     /**
      * @Route("/read/{id}", name="read_book", requirements={"id": "\d+"})
-     * @Template("AppBundle:Default:read.html.twig")
      * @param Request $request
      * @return array
      */
@@ -37,7 +38,11 @@ class DefaultController extends Controller
         $id = (int)$request->get('id');
         $bookRepository=$this->getDoctrine()->getRepository('AppBundle:Book');
         $book=$bookRepository->find($id);
-        return array('book'=>$book);
+        $response = new Response();
+        $response = $this->render('AppBundle:Default:read.html.twig', array('book'=>$book));
+        $date=new \DateTime();
+        $response->headers->setCookie(new Cookie('book_'.$id,$date->format('d.m.Y H:i:s'), 0, '/'));
+        return $response;
     }
 
     /**
