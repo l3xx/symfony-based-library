@@ -10,9 +10,9 @@
 
   * Настроить подключение к базе данных;
   
-  * Запустить bin/phing install;
+  * Запустить `bin/phing install`;
   
-  * Загрузить фикстуры командой php app/console doctrine:fixtures:load;
+  * Загрузить фикстуры командой `php app/console doctrine:fixtures:load`;
   
 Логин и пароль для тестов : admin
 
